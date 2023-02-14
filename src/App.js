@@ -1,24 +1,19 @@
-import logo from './logo.svg';
+
+import OriginalPieceHit from './OriginalPieceHit';
+import UserPieceHit from './UserPieceHit';
 import './App.css';
+import Staffs from './Staffs';
+
+// import sampleDrumHits from './sampleDrumHits';
+import sampleDrumHits from './sampleDrumHits';
+import SheetDisplay from './SheetDisplay';
+import Recorder from './Recorder';
+
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Recorder />
   );
 }
 
