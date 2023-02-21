@@ -7,13 +7,13 @@ import Staffs from './Staffs';
 // import sampleDrumHits from './sampleDrumHits';
 import sampleDrumHits from './sampleDrumHits';
 import SheetDisplay from './SheetDisplay';
-import Recorder from './Recorder';
+import RecorderJSDemo from './RecorderJSDemo';
 
 
 function App() {
 
   return (
-    <Recorder />
+    <RecorderJSDemo />
   );
 }
 
