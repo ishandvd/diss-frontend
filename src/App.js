@@ -1,6 +1,6 @@
 
 import OriginalPieceHit from './OriginalPieceHit';
-import UserPieceHit from './UserPieceHit';
+// import UserPieceHit from './UserPieceHit';
 import './App.css';
 import Staffs from './Staffs';
 

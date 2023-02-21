@@ -1,6 +1,6 @@
 
 import OriginalPieceHit from './OriginalPieceHit';
-import UserPieceHit from './UserPieceHit';
+// import UserPieceHit from './UserPieceHit';
 import './App.css';
 import Staffs from './Staffs';
 
@@ -55,7 +55,7 @@ function SheetDisplay() {
             staffGap={40}
           />
 
-          <UserPieceHit
+          {/* <UserPieceHit
             instrument="hihat"
             time={13}
             timeDiff={0.01}
@@ -64,7 +64,7 @@ function SheetDisplay() {
             staffWidth={500}
             lineGap={180}
             staffGap={40}
-          />
+          /> */}
 
         </svg>
       </div>

@@ -1,60 +1,55 @@
-import React, { useState, useRef } from 'react';
-import audioBufferToWav from 'audiobuffer-to-wav';
+import React, { useState } from 'react';
+import Recorder from 'recorder-js';
 
-const Recorder = () => {
-  const [recording, setRecording] = useState(false);
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
+function App() {
+  const [recorder, setRecorder] = useState(null);
 
-  const startRecording = () => {
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        mediaRecorderRef.current = new MediaRecorder(stream);
-        mediaRecorderRef.current.addEventListener('dataavailable', handleDataAvailable);
-        mediaRecorderRef.current.start();
-        setRecording(true);
-      });
+  const handleStart = () => {
+    const newRecorder = new Recorder({
+      sampleRate: 44100,
+      numChannels: 2,
+    });
+    newRecorder.start().then(() => {
+      setRecorder(newRecorder);
+    });
   };
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop();
-      setRecording(false);
-    }
+  const handleStop = () => {
+    recorder.stop();
   };
-
-  const handleDataAvailable = e => {
-    if (e.data.size > 0) {
-      audioChunksRef.current.push(e.data);
-    }
-  };
-
   const handleUpload = () => {
-    const audioBuffer = audioCtx.createBuffer(1, audioChunksRef.current.length, audioCtx.sampleRate);
-    audioBuffer.getChannelData(0).set(audioChunksRef.current);
-
-    // Convert the AudioBuffer to a WAV file
-    const wavData = audioBufferToWav(audioBuffer);
-
-      // Send the .wav file to the server using an HTTP request
-      fetch('http://localhost:5000/audio-upload', {
-        method: 'POST',
-        body: wavData.buffer,
-        headers: {
-          'Content-Type': 'audio/wav'
+    recorder.stop();
+    const audioBlob = recorder.getWAV();
+  
+    console.log('audioBlob', audioBlob);
+  
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'audio.wav');
+  
+    fetch('http://localhost:5000/audio-upload', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => {
+        console.log('response', response);
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to upload audio');
         }
-      }).then(response => response.text()).then(data => {
-        console.log(data);
-        }).catch(err => {
-            console.log(err);
-        });
-
-  };
+      })
+      .then(data => {
+        console.log('data', data);
+      })
+      .catch(error => {
+        console.error('Error uploading audio', error);
+      });
+  }
 
   return (
     <div>
-      <button onClick={startRecording} disabled={recording}>Start Recording</button>
-      <button onClick={stopRecording} disabled={!recording}>Stop Recording</button>
+      <button onClick={handleStart} disabled={recording}>Start Recording</button>
+      <button onClick={handleStop} disabled={!recording}>Stop Recording</button>
       <button onClick={handleUpload} disabled={audioChunksRef.current.length === 0}>Upload Audio</button>
     </div>
   );
